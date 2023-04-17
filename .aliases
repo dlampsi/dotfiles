@@ -1,0 +1,16 @@
+alias ll="ls -lah"
+alias grep='grep --color=auto'
+alias diff='diff --color=auto'
+
+alias tf='terraform'
+alias tg='terragrunt'
+
+alias gitb="git branch --show-current"
+
+# Generates string for debian package changelog file
+# https://www.debian.org/doc/debian-policy/ch-source.html#s-dpkgchangelog
+alias debchl="echo ' -- $(git config user.name) <$(git config user.email)>  $(date -R)'"
+
+if [[ -f ~/.aliases.local ]]; then
+  source ~/.aliases.local
+fi
