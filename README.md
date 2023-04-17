@@ -1,6 +1,6 @@
 # dotfiles
 
-[![Actions Status](https://github.com/dlampsi/dotfiles/workflows/default/badge.svg)](https://github.com/dlampsi/dotfiles/actions)
+[![Actions Status](https://github.com/dlampsi/dotfiles/workflows/checks/badge.svg)](https://github.com/dlampsi/dotfiles/actions)
 
 Yet another dotfiles template repo with configuration scripts for personal use.
 
