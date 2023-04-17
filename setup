@@ -37,7 +37,7 @@ if [[ $FORCE == "YES" ]]; then
 
     backup_dir=~/.dotfiles/backups/$(date '+%Y%m%d%H%M%S')
     echo "Creating backup dir $backup_dir ..."
-    mkdir -p $backup_dir 
+    mkdir -p "$backup_dir"
 fi
 
 copy_to_home() {
