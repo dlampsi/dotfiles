@@ -1,0 +1,65 @@
+#!/bin/bash
+
+OTHER_ARS=()
+
+while [[ $# -gt 0 ]]; do
+  # shellcheck disable=SC2221,SC2222
+  case $1 in
+      -h|--help)
+      echo "Setup dotfiles into your env"
+      echo " "
+      echo "$0 [flags] files.."
+      echo " "
+      echo "flags:"
+      echo "  -h, --help      show brief help"
+      echo "  -f, --forche    force existing files overwrite"
+      exit 0
+      ;;
+    -f|--force)
+      FORCE=YES
+      shift
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      OTHER_ARS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+backup_dir=''
+
+if [[ $FORCE == "YES" ]]; then
+    echo "Force overwriting of files"
+
+    backup_dir=~/.dotfiles/backups/$(date '+%Y%m%d%H%M%S')
+    echo "Creating backup dir $backup_dir ..."
+    mkdir -p "$backup_dir"
+fi
+
+copy_to_home() {
+    src_dir=$1
+    filename=$2
+    if [[ ! -f ~/$filename ]]; then
+        echo "Creating '~/$filename' ..."
+        cp -n -p "$src_dir/$filename" ~/"$filename"
+    elif [[ $FORCE == "YES" ]]; then
+        echo "Overwriting '~/$filename'"
+        cp -p ~/"$filename" "$backup_dir"/"$filename"
+        cp -p "$src_dir/$filename" ~/"$filename"
+    else 
+        echo "File '~/$filename' already exists"
+    fi
+}
+
+echo "Copying configs ..."
+copy_to_home "." ".aliases"
+copy_to_home "./zsh" ".zshenv"
+copy_to_home "./zsh" ".zshrc"
+
+echo "Copying zsh functions ..."
+mkdir -p ~/.functions
+cp -a -n functions/. ~/.functions/
