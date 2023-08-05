@@ -59,7 +59,8 @@ echo "Copying configs ..."
 copy_to_home "." ".aliases"
 copy_to_home "./zsh" ".zshenv"
 copy_to_home "./zsh" ".zshrc"
-copy_to_home "./configs" ".tmux.conf"
+copy_to_home "./configs/tmux" ".tmux.conf"
+copy_to_home "./configs/tmux" ".tmux/lang.sh"
 
 echo "Copying zsh functions ..."
 mkdir -p ~/.functions
