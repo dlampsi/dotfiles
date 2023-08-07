@@ -7,6 +7,9 @@ alias tg='terragrunt'
 
 alias gitb="git branch --show-current"
 
+alias ghpr='gh pr view -w'
+alias ghr='gh repo view -w'
+
 # Generates string for debian package changelog file
 # https://www.debian.org/doc/debian-policy/ch-source.html#s-dpkgchangelog
 alias debchl="echo ' -- $(git config user.name) <$(git config user.email)>  $(date -R)'"
