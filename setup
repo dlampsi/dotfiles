@@ -90,7 +90,7 @@ basecopy() {
 }
 
 basecopy .aliases ~ 1
-basecopy functions ~ 0
+basecopy .functions ~ 0
 basecopy zsh/.zshenv ~ 0
 basecopy zsh/.zshrc ~ 0
 basecopy configs/tmux/.tmux.conf ~ 0
