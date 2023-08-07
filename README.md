@@ -28,6 +28,10 @@ declare -f
 
 ## Content
 
+### Configs
+
+The directory contains config files and scripts for various apps, such as tmux or vim.
+
 ### Zsh
 
 The [.zshrc](.zshrc) and [.zshenv](.zshenv) files will be updated for the configuration for the zsh.
