@@ -96,3 +96,4 @@ basecopy zsh/.zshrc ~ 0
 basecopy configs/tmux/.tmux.conf ~ 0
 basecopy configs/tmux/.tmux/lang.sh ~/.tmux 0
 basecopy configs/tmux/.tmux/plugins/tmux-weather/scripts/helpers.sh ~/.tmux/plugins/tmux-weather/scripts 0
+basecopy configs/vim/.vimrc ~ 0
