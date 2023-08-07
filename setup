@@ -89,7 +89,7 @@ basecopy() {
   echo ""
 }
 
-basecopy .aliases ~ 0
+basecopy .aliases ~ 1
 basecopy functions ~ 0
 basecopy zsh/.zshenv ~ 0
 basecopy zsh/.zshrc ~ 0
