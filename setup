@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -o pipefail
+
 OTHER_ARS=()
 
 while [[ $# -gt 0 ]]; do
@@ -30,38 +33,65 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-backup_dir=''
+backup_root=$HOME
+backup_dir=".dotfiles/backups/$(date '+%Y-%m-%d-%H%M%S')"
+backup_path="$backup_root/$backup_dir"
 
-if [[ $FORCE == "YES" ]]; then
-    echo "Force overwriting of files"
+basecopy() {
+  src=$1
+  destdir=$2
+  force=$3
 
-    backup_dir=~/.dotfiles/backups/$(date '+%Y%m%d%H%M%S')
-    echo "Creating backup dir $backup_dir ..."
-    mkdir -p "$backup_dir"
-fi
+  basename=$(basename "${src}")
+  basedir="$(dirname "${src}")"
+  destpath="$destdir/$basename"
 
-copy_to_home() {
-    src_dir=$1
-    filename=$2
-    if [[ ! -f ~/$filename ]]; then
-        echo "Creating '~/$filename' ..."
-        cp -n -p "$src_dir/$filename" ~/"$filename"
-    elif [[ $FORCE == "YES" ]]; then
-        echo "Overwriting '~/$filename'"
-        cp -p ~/"$filename" "$backup_dir"/"$filename"
-        cp -p "$src_dir/$filename" ~/"$filename"
-    else 
-        echo "File '~/$filename' already exists"
+  if [[ $force == 1 && $FORCE != "YES" ]]; then
+    if [[ ! -d "$backup_path" ]]; then
+      echo "Backup directory: $backup_path"
+      (cd $backupds_root && mkdir -p $backup_dir)
     fi
+  fi
+
+  if [[ -d "$src" ]]; then
+    echo "Dir: $src"
+
+    if [[ ! -d "$destpath" ]]; then
+      echo "  Copying '$src' to '$destpath' ..."
+      cp -r "$src/" "$destpath/"
+    elif [[ $force == 1 || $FORCE == "YES" ]]; then
+      echo "  Backup '$destpath' dir"
+      mkdir -p "$backup_path/$src" && cp -r "$destpath/" "$backup_path/$basename/"
+
+      echo "  Overwriting dir '$destpath'"
+      cp -r "$src/" "$destpath/"
+    else
+      echo "  Directory '$destpath' already exists"
+    fi
+
+  else
+    echo "File: $src"
+
+    if [[ ! -f $destpath ]]; then
+      echo "  Copying '$src' to '$destpath' ..."
+      cp -n -p "$src" "$destpath"
+    elif [[ $force == 1 || $FORCE == "YES" ]]; then
+      echo "  Backup '$destpath' file"
+      mkdir -p "$backup_path/$basedir" && cp -p "$destpath" "$backup_path/$basedir"
+
+      echo "  Overwriting file '$destpath'"
+      cp -p "$src" "$destpath"
+    else
+      echo "  File '$destpath' already exists"
+    fi
+  fi
+
+  echo ""
 }
 
-echo "Copying configs ..."
-copy_to_home "." ".aliases"
-copy_to_home "./zsh" ".zshenv"
-copy_to_home "./zsh" ".zshrc"
-copy_to_home "./configs/tmux" ".tmux.conf"
-copy_to_home "./configs/tmux" ".tmux/lang.sh"
-
-echo "Copying zsh functions ..."
-mkdir -p ~/.functions
-cp -a -n functions/. ~/.functions/
+basecopy .aliases ~ 0
+basecopy functions ~ 0
+basecopy zsh/.zshenv ~ 0
+basecopy zsh/.zshrc ~ 0
+basecopy configs/tmux/.tmux.conf ~ 0
+basecopy configs/tmux/lang.sh ~/.tmux 0
