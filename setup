@@ -49,7 +49,7 @@ basecopy() {
   if [[ $force == 1 && $FORCE != "YES" ]]; then
     if [[ ! -d "$backup_path" ]]; then
       echo "Backup directory: $backup_path"
-      (cd $backupds_root && mkdir -p $backup_dir)
+      (cd "$backup_root" && mkdir -p "$backup_dir")
     fi
   fi
 
