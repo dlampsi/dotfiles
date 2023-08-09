@@ -16,9 +16,6 @@ alias ghr='gh repo view -w'
 # https://www.debian.org/doc/debian-policy/ch-source.html#s-dpkgchangelog
 alias debchl="echo ' -- $(git config user.name) <$(git config user.email)>  $(date -R)'"
 
-alias dps="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.RunningFor}}\t{{.Ports}}\t{{.Image}}'"
-alias dpsa="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.RunningFor}}\t{{.Ports}}\t{{.Image}}' -a"
-
 if [[ -f ~/.aliases.local ]]; then
   source ~/.aliases.local
 fi
