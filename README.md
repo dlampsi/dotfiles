@@ -11,9 +11,21 @@ All you need to setup configs is a bash.
 Setup files:
 ```bash
 # Regular setup all dotfiles
-bash setup
+./setup
+
 # Force overwrite existwsing files
-bash setup -f
+./setup -f
+
+# Setup only zsh
+./setup zsh
+
+# Setup only zsh with force overwrite
+./setup -f zsh
+```
+
+See all available options:
+```bash
+./setup -h
 ```
 
 Check setup:
@@ -27,10 +39,6 @@ declare -f
 <!-- https://github.com/webpro/awesome-dotfiles -->
 
 ## Content
-
-### Configs
-
-The directory contains config files and scripts for various apps, such as tmux or vim.
 
 ### Zsh
 
@@ -47,3 +55,7 @@ You can keep your local aliases in the `~/.aliases.local` file, they will be inc
 ### Functions
 
 Custom functions are in the [.functions/](.functions/) directory, they will be copied to the `~/.functions/` during the setup.
+
+### Configs
+
+The directory contains config files and scripts for various apps, such as tmux or vim.
