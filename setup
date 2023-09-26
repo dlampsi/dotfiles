@@ -104,7 +104,7 @@ setup_aliases() {
 }
 
 setup_functions() {
-  setup_dir ".functions" "$HOME/.functions"
+  setup_dir "functions" "$HOME/.functions"
 }
 
 setup_zsh() {

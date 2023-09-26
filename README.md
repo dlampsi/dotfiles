@@ -54,7 +54,7 @@ You can keep your local aliases in the `~/.aliases.local` file, they will be inc
 
 ### Functions
 
-Custom functions are in the [.functions/](.functions/) directory, they will be copied to the `~/.functions/` during the setup.
+Custom functions are in the [functions/](functions/) directory, they will be copied to the `~/.functions/` during the setup.
 
 ### Configs
 
