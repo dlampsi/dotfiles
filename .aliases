@@ -1,11 +1,13 @@
 alias ll="ls -lah"
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
+alias history='history -i'
 
 alias tx='tmux'
 
 alias tf='terraform'
 alias tg='terragrunt'
+alias tm='terramate'
 
 alias gitb="git branch --show-current"
 
@@ -15,6 +17,8 @@ alias ghr='gh repo view -w'
 # Generates string for debian package changelog file
 # https://www.debian.org/doc/debian-policy/ch-source.html#s-dpkgchangelog
 alias debchl="echo ' -- $(git config user.name) <$(git config user.email)>  $(date -R)'"
+
+alias gpgt="echo 'test' | gpg --clearsign"
 
 if [[ -f ~/.aliases.local ]]; then
   source ~/.aliases.local
