@@ -3,31 +3,27 @@
 set -e
 set -o pipefail
 
-OTHER_ARS=()
-
-while [[ $# -gt 0 ]]; do
-  # shellcheck disable=SC2221,SC2222
-  case $1 in
-      -h|--help)
-      echo "Setup dotfiles into your env"
+for arg in "$@"; do
+  case $arg in
+    -h|--help)
+      echo "Setup dotfiles an configurations into local environment"
       echo " "
-      echo "$0 [flags] files.."
+      echo "$0 [flags] action"
       echo " "
       echo "flags:"
       echo "  -h, --help      show brief help"
       echo "  -f, --forche    force existing files overwrite"
+      echo " "
+      echo "actions:"
+      echo "  disk-image     Creating a disk image"
       exit 0
-      ;;
+    ;;
     -f|--force)
-      FORCE=YES
+      force=1
       shift
       ;;
-    -*|--*)
-      echo "Unknown option $1"
-      exit 1
-      ;;
     *)
-      OTHER_ARS+=("$1")
+      action=$1
       shift
       ;;
   esac
@@ -37,63 +33,117 @@ backup_root=$HOME
 backup_dir=".dotfiles/backups/$(date '+%Y-%m-%d-%H%M%S')"
 backup_path="$backup_root/$backup_dir"
 
-basecopy() {
+if [[ -n $force ]]; then
+  if [[ ! -d "$backup_path" ]]; then
+    (cd "$backup_root" && mkdir -p "$backup_dir")
+    echo "Created backup dir: $backup_path"
+  fi
+fi
+
+
+setup_file() {
   src=$1
-  destdir=$2
-  force=$3
+  dest=$2
 
-  basename=$(basename "${src}")
+  if [[ -n $force || "$3" != "" ]]; then
+    overwrite=1
+  fi
+
   basedir="$(dirname "${src}")"
-  destpath="$destdir/$basename"
+  basename="$(basename "${src}")"
 
-  if [[ $force == 1 && $FORCE != "YES" ]]; then
-    if [[ ! -d "$backup_path" ]]; then
-      echo "Backup directory: $backup_path"
-      (cd "$backup_root" && mkdir -p "$backup_dir")
-    fi
+  if [[ ! -f "$dest" ]]; then
+    echo "($src) Copying to '$dest'"
+    cp -n -p "$src" "$dest"
+    return
   fi
 
-  if [[ -d "$src" ]]; then
-    echo "Dir: $src"
+  echo "($src) File already exists in '$dest'"
 
-    if [[ ! -d "$destpath" ]]; then
-      echo "  Copying '$src' to '$destpath' ..."
-      cp -r "$src/" "$destpath/"
-    elif [[ $force == 1 || $FORCE == "YES" ]]; then
-      echo "  Backup '$destpath' dir"
-      mkdir -p "$backup_path/$src" && cp -r "$destpath/" "$backup_path/$basename/"
-
-      echo "  Overwriting dir '$destpath'"
-      cp -r "$src/" "$destpath/"
-    else
-      echo "  Directory '$destpath' already exists"
-    fi
-
-  else
-    echo "File: $src"
-
-    if [[ ! -f $destpath ]]; then
-      echo "  Copying '$src' to '$destpath' ..."
-      cp -n -p "$src" "$destpath"
-    elif [[ $force == 1 || $FORCE == "YES" ]]; then
-      echo "  Backup '$destpath' file"
-      mkdir -p "$backup_path/$basedir" && cp -p "$destpath" "$backup_path/$basedir"
-
-      echo "  Overwriting file '$destpath'"
-      cp -p "$src" "$destpath"
-    else
-      echo "  File '$destpath' already exists"
-    fi
+  if [[ -n $overwrite ]]; then
+    echo "($src) Backup to '$backup_path/$basedir/$basename'"
+    mkdir -p "$backup_path/$basedir"
+    cp -p "$dest" "$backup_path/$basedir/$basename"
+  
+    cp -p "$src" "$dest"
+    echo "($src) File '$dest' overwrited"
   fi
-
-  echo ""
 }
 
-basecopy .aliases ~ 1
-basecopy .functions ~ 0
-basecopy zsh/.zshenv ~ 0
-basecopy zsh/.zshrc ~ 0
-basecopy configs/tmux/.tmux.conf ~ 1
-basecopy configs/tmux/.tmux/lang.sh ~/.tmux 0
-basecopy configs/tmux/.tmux/plugins/tmux-weather/scripts/helpers.sh ~/.tmux/plugins/tmux-weather/scripts 0
-basecopy configs/vim/.vimrc ~ 0
+setup_dir() {
+  src=$1
+  dest=$2
+
+  if [[ -n $force || "$3" != "" ]]; then
+    overwrite=1
+  fi
+  
+  basedir="$(dirname "${src}")"
+  basename="$(basename "${src}")"
+
+  if [[ ! -d "$dest" ]]; then
+    echo "($src) Copying to '$dest'"
+    cp -r "$src/" "$dest/"
+    return
+  fi
+
+  echo "($src) Directory already exists in '$dest'"
+
+  if [[ -n $overwrite ]]; then
+    echo "($src) Backup to '$backup_path/$basename'"
+    mkdir -p "$backup_path/$src"
+    cp -r "$dest/" "$backup_path/$basename/"
+
+    cp -r "$src/" "$dest/"
+    echo "($src) Directory '$dest' overwrited"
+  fi
+}
+
+setup_aliases() {
+  setup_file ".aliases" "$HOME/.aliases"
+}
+
+setup_functions() {
+  setup_dir ".functions" "$HOME/.functions"
+}
+
+setup_zsh() {
+  setup_file "zsh/.zshenv" "$HOME/.zshenv"
+  setup_file "zsh/.zshrc" "$HOME/.zshrc"
+}
+
+setup_tmux() {
+  setup_file "configs/tmux/.tmux.conf" "$HOME/.tmux.conf"
+  setup_file "configs/tmux/.tmux/lang.sh" "$HOME/.tmux/lang.sh"
+  setup_file "configs/tmux/.tmux/plugins/tmux-weather/scripts/helpers.sh" "$HOME/.tmux/plugins/tmux-weather/scripts/helpers.sh"
+}
+
+setup_vim() {
+  setup_file "configs/vim/.vimrc" "$HOME/.vimrc"
+}
+
+case $action in
+  "aliases")
+    setup_aliases
+    ;;
+  "zsh")
+    setup_zsh
+    ;;
+  "functions")
+    setup_functions
+    ;;
+  "tmux")
+    setup_tmux
+    ;;
+  "vim")
+    setup_vim
+    ;;
+  "all"|*)
+    echo "Running all actions"
+    setup_aliases
+    setup_functions
+    setup_zsh
+    setup_tmux
+    setup_vim
+    ;;
+esac
