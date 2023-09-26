@@ -93,7 +93,7 @@ basecopy .aliases ~ 1
 basecopy .functions ~ 0
 basecopy zsh/.zshenv ~ 0
 basecopy zsh/.zshrc ~ 0
-basecopy configs/tmux/.tmux.conf ~ 0
+basecopy configs/tmux/.tmux.conf ~ 1
 basecopy configs/tmux/.tmux/lang.sh ~/.tmux 0
 basecopy configs/tmux/.tmux/plugins/tmux-weather/scripts/helpers.sh ~/.tmux/plugins/tmux-weather/scripts 0
 basecopy configs/vim/.vimrc ~ 0
