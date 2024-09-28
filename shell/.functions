@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Clears local branches that no longer exist on the remote
+function gcl() {
+  git fetch -p && for brch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D "$brch"; done
+}
+
+# Generates string for debian package changelog file
+# https://www.debian.org/doc/debian-policy/ch-source.html#s-dpkgchangelog
+function debchl() {
+  echo " -- $(git config user.name) <$(git config user.email)>  $(date -R)"
+}
+
+# Returns the current input source language
+function lang() {
+  lang=$(defaults read ~/Library/Preferences/com.apple.HIToolbox.plist AppleCurrentKeyboardLayoutInputSourceID | awk -F. '{print $4}' | cut -c1-3)
+  echo "$lang"
+}
+
+# Loading local aliases
+# shellcheck source=/dev/null
+[[ -f ~/.functions.local ]] && source ~/.functions.local

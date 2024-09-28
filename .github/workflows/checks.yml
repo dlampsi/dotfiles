@@ -1,18 +1,51 @@
 name: checks
 on:
-  push:
+  pull_request:
     paths-ignore:
+      - '**/README.md'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/README.md'
       - LICENSE
-      - README.md
-      - CONTRIBUTING.md
 jobs:
-  shellcheck:
+  linter:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        path:
+          - "setup.sh"
+          - "deps/brew.sh"
+          - "shell/.aliases"
+          - "shell/.functions"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: shellcheck
         uses: sudo-bot/action-shellcheck@latest
         with:
-          cli-args: "setup"
+          cli-args: "${{ matrix.path }}"
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Checking that each file in symlinks.cfg actually exists in repo.
+      - name: Checking symlinks file
+        run: |
+          file="symlinks.cfg"
+          i=0
+          while IFS='=' read -r key value; do
+            i=$((i+1))
+            if [[ $key =~ ^# ]]; then
+              continue
+            fi
+            if [[ ! -f $key ]]; then
+              echo "Can't find file in '$file' on line $i: '$key'"
+              exit 1
+            fi
+          done < "$file"

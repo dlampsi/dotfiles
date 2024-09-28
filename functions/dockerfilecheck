@@ -1,4 +1,0 @@
-
-function dockerfilecheck() {
-    docker run --rm -w "${PWD}" -v "${PWD}:${PWD}" ghcr.io/hadolint/hadolint:v2.12.0-alpine hadolint "$@"
-}
