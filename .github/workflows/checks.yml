@@ -17,7 +17,8 @@ jobs:
         path:
           - "setup.sh"
           - "deps/brew.sh"
-          - "shell/.*"
+          - "shell/.aliases"
+          - "shell/.functions"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
