@@ -1,4 +1,0 @@
-# Performs docker ps with a custom format
-function dps() {
-    docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.RunningFor}}\t{{.Ports}}\t{{.Image}}' "$@"
-}

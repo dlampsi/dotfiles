@@ -1,4 +1,0 @@
-# Stops and rms docker container
-function dsrm() {
-    docker stop $1 && docker rm $1
-}

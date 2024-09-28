@@ -1,5 +1,0 @@
-
-# Clears local branches that no longer exist on the remote
-function gitclb() {
-    git fetch -p && for brch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $brch; done
-}

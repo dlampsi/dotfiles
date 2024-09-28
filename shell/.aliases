@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+alias reload="exec ${SHELL} -l"
+alias ll="ls -lah"
+alias grep='grep --color=auto'
+alias diff='diff --color=auto'
+alias history='history -i'
+alias week='date +%V'
+
+# Signs test string to enable GPG.
+alias gpgt="echo 'test' | gpg --clearsign"
+
+alias shellcheck='docker run --rm -w $PWD -v $PWD:$PWD koalaman/shellcheck:v0.10.0'
+
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# ------- TMUX
+alias tx='tmux'
+
+# ------- Terraform & co
+alias tf='terraform'
+alias tg='terragrunt'
+alias tm='terramate'
+
+# ------- Git
+alias g="git"
+# Shows current branch name
+alias gb="git branch --show-current"
+# Force push current branch to origin
+alias gfp="git push origin \$(git rev-parse --abbrev-ref HEAD) -f"
+
+# ------- Github CLI
+alias ghr="gh repo view -w"
+alias ghpr="gh pr view -w"
+
+# ------- AWS CLI
+alias awslocal="aws --endpoint-url=http://localhost:4566"
+
+# ------- Docker
+alias d="docker"
+alias dps="docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.RunningFor}}\t{{.Ports}}\t{{.Image}}'"
+alias dc="docker compose"
+alias dcu="docker compose up"
+alias dcd="docker compose down"
+alias dcr="docker compose run"
+
+
+# ------- Loading local aliases
+# shellcheck source=/dev/null
+[[ -f ~/.aliases.local ]] && source ~/.aliases.local
