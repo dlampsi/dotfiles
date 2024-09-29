@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Create nvim config directory since it doesn't exist by default.
-mkdir -p $HOME/.config/nvim
+mkdir -p "$HOME/.config/nvim"
 
 # Install vim-plug - https://github.com/junegunn/vim-plug
 # NOTE: Run ':PlugInstall' in nvim after this.
