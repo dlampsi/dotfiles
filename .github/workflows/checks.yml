@@ -17,6 +17,7 @@ jobs:
         path:
           - "setup.sh"
           - "deps/brew.sh"
+          - "deps/nvim.sh"
           - "shell/.aliases"
           - "shell/.functions"
     steps:
