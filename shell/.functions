@@ -5,6 +5,11 @@ function gcl() {
   git fetch -p && for brch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D "$brch"; done
 }
 
+# Soft reset provided number of commits from current HEAD.
+function gr() {
+  git reset --soft HEAD~"$1"
+}
+
 # Generates string for debian package changelog file
 # https://www.debian.org/doc/debian-policy/ch-source.html#s-dpkgchangelog
 function debchl() {
