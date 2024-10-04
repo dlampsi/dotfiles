@@ -1,0 +1,9 @@
+version: "1"
+git_protocol: https
+prompt: enabled
+aliases:
+  # List all open PRs assigned to you (with hyperlinks to the PRs)
+  prs: |
+    search prs --assignee @me --state open --sort updated
+    --json 'repository,url,number,title,updatedAt'
+    --template '{{tablerow  "REPO" "ID" "TITLE" "UPDATED" }}{{range .}}{{tablerow .repository.nameWithOwner (hyperlink .url (printf "#%v" .number) | autocolor "cyan") .title (timeago .updatedAt | autocolor "black+h")}}{{end}}'
