@@ -3,6 +3,7 @@ on:
   pull_request:
     paths-ignore:
       - '**/README.md'
+      - LICENSE
   push:
     branches:
       - main
