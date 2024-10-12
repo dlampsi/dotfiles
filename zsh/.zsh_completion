@@ -1,0 +1,1 @@
+[[ -f ~/.zsh_completion.local ]] && source ~/.zsh_completion.local

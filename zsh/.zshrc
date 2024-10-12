@@ -19,3 +19,6 @@ setopt SHARE_HISTORY      # Share history between sessions
 
 # Load aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
+
+# Load completions
+[[ -f ~/.zsh_completion ]] && source ~/.zsh_completion
